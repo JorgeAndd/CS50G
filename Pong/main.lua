@@ -5,13 +5,13 @@ Class = require 'class'
 require 'Paddle'
 require 'Ball'
 
-WINDOW_WIDTH = 1280
-WINDOW_HEIGHT = 720
+WINDOW_WIDTH = 640
+WINDOW_HEIGHT = 360
 
-VIRTUAL_WIDTH = 432
-VIRTUAL_HEIGHT = 243
+VIRTUAL_WIDTH = 216
+VIRTUAL_HEIGHT = 121
 
-PADDLE_SPEED = 200
+PADDLE_SPEED = 150
 
 function love.load()
   love.graphics.setDefaultFilter('nearest', 'nearest')
@@ -40,6 +40,40 @@ function love.load()
 end
 
 function love.update(dt)
+  if gameState == 'play' then
+    if ball:collides(player1) then
+      ball.dx = -ball.dx * 1.01
+      ball.x = player1.x + 5
+
+      if ball.dy < 0 then
+        ball.dy = -math.random(10, 150)
+      else
+        ball.dy = math.random(10,150)
+      end
+    end
+
+    if ball:collides(player2) then
+      ball.dx = -ball.dx * 1.01
+      ball.x = player2.x - 4
+
+      if ball.dy < 0 then
+        ball.dy = -math.random(10, 150)
+      else
+        ball.dy = math.random(10,150)
+      end
+    end
+  
+    if ball.y <= 0 then
+      ball.y = 0
+      ball.dy = -ball.dy
+    end
+
+    if ball.y >= VIRTUAL_HEIGHT - 4 then
+      ball.y = VIRTUAL_HEIGHT - 4
+      ball.dy = -ball.dy
+    end
+  end
+  
   -- player 1 movement
   if love.keyboard.isDown('w') then
     player1.dy = -PADDLE_SPEED
@@ -111,5 +145,6 @@ end
 function displayFPS()
   love.graphics.setFont(smallFont)
   love.graphics.setColor(0, 1, 0, 1)
-  love.graphics.print('FPS:' .. tostring(love.timer.getFPS()), 10, 10)
+  love.graphics.print('FPS: ' .. tostring(love.timer.getFPS()), 10, 10)
+  love.graphics.print('Ball speed: ' .. tostring(math.abs(ball.dx)), 10, 20)
 end
