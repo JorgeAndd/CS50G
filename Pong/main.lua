@@ -5,13 +5,13 @@ Class = require 'class'
 require 'Paddle'
 require 'Ball'
 
-WINDOW_WIDTH = 640
-WINDOW_HEIGHT = 360
+WINDOW_WIDTH = 1280
+WINDOW_HEIGHT = 720
 
-VIRTUAL_WIDTH = 216
-VIRTUAL_HEIGHT = 121
+VIRTUAL_WIDTH = 432
+VIRTUAL_HEIGHT = 243
 
-PADDLE_SPEED = 150
+PADDLE_SPEED = 200
 
 function love.load()
   love.graphics.setDefaultFilter('nearest', 'nearest')
@@ -30,6 +30,9 @@ function love.load()
     resizable = false,
     vsync = true
   })
+
+  player1Score = 0
+  player2Score = 0
 
   player1 = Paddle(10, 30, 5, 20)
   player2 = Paddle(VIRTUAL_WIDTH - 10, VIRTUAL_HEIGHT - 30, 5, 20)
@@ -129,6 +132,11 @@ function love.draw()
   else
     love.graphics.printf('Hello Play State!', 0, 20, VIRTUAL_WIDTH, 'center')
   end
+
+  -- draw score
+  love.graphics.setFont(scoreFont)
+  love.graphics.print(tostring(player1Score), VIRTUAL_WIDTH / 2 - 50, VIRTUAL_HEIGHT / 3)
+  love.graphics.print(tostring(player2Score), VIRTUAL_WIDTH / 2 + 30, VIRTUAL_HEIGHT / 3)
   
   -- draw players
   player1:render()
