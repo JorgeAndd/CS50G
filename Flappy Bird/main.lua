@@ -29,6 +29,8 @@ local spawnTimer = 0
 
 local lastY = -PIPE_HEIGHT + math.random(80) + 20
 
+local scrolling = true
+
 function love.load()
   math.randomseed(os.time())
   love.graphics.setDefaultFilter('nearest', 'nearest')
@@ -65,6 +67,11 @@ function love.keyboard.wasPressed(key)
 end
 
 function love.update(dt)
+  if not scrolling then
+    love.keyboard.keysPressed = {}
+    return
+  end 
+
   backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
   groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % VIRTUAL_WIDTH
 
@@ -81,6 +88,11 @@ function love.update(dt)
   
   for k, pair in pairs(pipePairs) do
     pair:update(dt)
+
+    if (bird:collides(pair.pipes.upper) or 
+      bird:collides(pair.pipes.lower)) then
+        scrolling = false
+    end
   end
 
   for k, pair in pairs(pipePairs) do
