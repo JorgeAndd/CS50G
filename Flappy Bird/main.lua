@@ -28,13 +28,6 @@ local GROUND_SCROLL_SPEED = 60
 
 local BACKGROUND_LOOPING_POINT = 413
 
-local bird = Bird()
-local pipePairs = {}
-
-local spawnTimer = 0
-
-local lastY = -PIPE_HEIGHT + math.random(80) + 20
-
 function love.load()
   math.randomseed(os.time())
   love.graphics.setDefaultFilter('nearest', 'nearest')
